@@ -78,6 +78,19 @@ std::string Debug::CalculateSpaces(const std::string& str)
     if (spacesNeeded < 0) spacesNeeded = 0;
     return std::string(spacesNeeded, ' ');
 }
+std::string Debug::GetLineWithMessage(const std::string& str)
+{
+    std::string _str = "";
+    int n = str.length();
+    std::string str_line = std::string((lengthOfLine - n) / 2, '-');
+    _str += str_line + " " + str + " " + str_line;
+    if (_str.length() < lengthOfLine)
+    {
+        _str += "-";
+    }
+    
+    return _str;
+}
 
 std::string Debug::GetLevelString(int level)
 {
@@ -149,6 +162,44 @@ int Debug::getTotalDebugTimes()
 {
     totalTimes = successTimes + infoTimes + warningTimes + errorTimes;
     return totalTimes;
+}
+
+void Debug::resetDebugTimes(const DebugRank& rank)
+{
+    switch (rank)
+    {
+    case DebugRank::SUCCESS:
+        successTimes = 0;
+        break;
+    case DebugRank::INFO:
+        infoTimes = 0;
+        break;
+    case DebugRank::WARNING:
+        warningTimes = 0;
+        break;
+    case DebugRank::ERROR:
+        errorTimes = 0;
+        break;
+    default:
+        break;
+    }
+}
+void Debug::resetTotalDebugTimes()
+{
+    successTimes = 0;
+    infoTimes = 0;
+    warningTimes = 0;
+    errorTimes = 0;
+    totalTimes = 0;
+}
+void Debug::resetTagDebugTimes(const std::string& tag)
+{
+    if (tag.empty()) return;
+    tagTimes.erase(tag);
+}
+void Debug::resetAllTagDebugTimes()
+{
+    tagTimes.clear();
 }
 
 int Debug::getCurrentLevel() const
@@ -253,6 +304,16 @@ bool Debug::log(const DebugRank& rank, const std::string& message, const std::st
     std::cout << str << std::endl;
 
     return true;
+}
+
+void Debug::line(const DebugColor& color, const std::string& message)
+{
+    if (!isEnabled) return;
+    
+    std::string str_color = SwitchColorCode(color);
+    std::string str_line = GetLineWithMessage(message);
+    std::string str = str_color + str_line + SwitchColorCode(DebugColor::WHITE);
+    std::cout << str << std::endl;
 }
 
 void Debug::logSpendTime(const std::function<void()>& func, const std::string& taskName)

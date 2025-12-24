@@ -39,6 +39,7 @@ private:
     int num;
     int lengthOfSpace = 15;
     int currentLevel = 0;
+    int lengthOfLine = 80;
 
     // Default Debug Colors
     DebugColor successColor = DebugColor::GREEN;
@@ -64,6 +65,8 @@ private:
     
     // Calculate spaces for [RANK] part
     std::string CalculateSpaces(const std::string& str);
+    // Calculate '-' for line part
+    std::string GetLineWithMessage(const std::string& str);
 
     // Calculate level string
     std::string GetLevelString(int level);
@@ -87,13 +90,25 @@ public:
     bool getWithTimeStamp() const;
     // Enable or disable timestamp, return current status
     bool setWithTimeStamp(const bool& enable);
+
     // Use this function to get debug times for a specific rank
     int getDebugTimes(const DebugRank& rank);
     // Use this function to get total debug times
     // To prevent update TotalDebugTimes every time logging, we just calculate it when you call this function.
     // If you get it privately, it may be inaccurate.
     int getTotalDebugTimes();
+    // Reset debug times for a specific rank
+    // Note: If you reset a specific rank debug times, total debug times will not be changed until you call getTotalDebugTimes().
+    void resetDebugTimes(const DebugRank& rank);
+    // Reset total debug times
+    // If you call this function, all specific rank debug times will also be reset.
+    void resetTotalDebugTimes();
+    // Get debug times for a specific tag
+    void resetTagDebugTimes(const std::string& tag);
+    // Reset all tag debug times
+    void resetAllTagDebugTimes();
 
+    // Get current debug level
     int getCurrentLevel() const;
     // Handle current level. You can only plus or minus 1 each time.
     // For example, if you input 2, it will only plus 1 to current level.
@@ -114,6 +129,9 @@ public:
     * @return bool: Returns true if the message was logged successfully, false otherwise.
     */
     bool log(const DebugRank& rank, const std::string& message, const std::string& tag = "");
+    
+    // Print a line with color and message
+    void line(const DebugColor& color = DebugColor::WHITE, const std::string& message = "");
 
     // You can customize the color for each rank.
     bool setColor(const DebugRank& rank, const DebugColor& color);

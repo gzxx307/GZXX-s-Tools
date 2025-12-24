@@ -14,6 +14,7 @@ int main()
     debug.log(DebugRank::SUCCESS, "This is a success message.", "Initialization");
     debug.log(DebugRank::INFO, "This is another info message with a tag.", "Initialization");
     debug.log(DebugRank::INFO, std::to_string(debug.getTagDebugTimes("Initialization")));
+    debug.line(DebugColor::GREEN, "ss");
 
     debug.logSpendTime([]() {
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
