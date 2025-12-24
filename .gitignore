@@ -1,0 +1,11 @@
+
+*.config
+*.ini
+*.cfg
+*.json
+*.yaml
+*.yml
+
+*.exe
+
+output/
